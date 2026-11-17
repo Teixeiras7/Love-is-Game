@@ -1,0 +1,9 @@
+# Só o jogo vai pro GitHub. Fotos e outros projetos desta pasta ficam só no computador.
+/*
+!/.gitignore
+!/README.md
+!/Jogo/
+!/.github/
+
+# Arquivos compilados (o executar.bat recria)
+/Jogo/bin/

@@ -1,0 +1,40 @@
+{
+  "anims": {
+    "herRun": [{"f": "herRun-0.png", "w": 30.759, "h": 53.772, "ax": 16.868}, {"f": "herRun-1.png", "w": 30.304, "h": 54.000, "ax": 16.529}, {"f": "herRun-2.png", "w": 27.570, "h": 54.000, "ax": 14.687}, {"f": "herRun-3.png", "w": 30.304, "h": 49.671, "ax": 16.222}, {"f": "herRun-4.png", "w": 23.924, "h": 54.228, "ax": 12.386}, {"f": "herRun-5.png", "w": 26.203, "h": 53.544, "ax": 13.094}, {"f": "herRun-6.png", "w": 26.658, "h": 54.228, "ax": 13.257}, {"f": "herRun-7.png", "w": 31.443, "h": 54.684, "ax": 16.580}],
+    "herJump": [{"f": "herJump-0.png", "w": 35.089, "h": 54.228, "ax": 21.075}, {"f": "herJump-1.png", "w": 38.278, "h": 52.177, "ax": 18.828}, {"f": "herJump-2.png", "w": 35.089, "h": 52.405, "ax": 16.735}],
+    "herSlide": [{"f": "herSlide-0.png", "w": 72.228, "h": 37.367, "ax": 36.114}, {"f": "herSlide-1.png", "w": 82.481, "h": 35.544, "ax": 41.241}],
+    "herIcon": [{"f": "herIcon-0.png", "w": 21.933, "h": 14.000, "ax": 10.967}],
+    "himWave": [{"f": "himWave-0.png", "w": 18.584, "h": 62.493, "ax": 9.198}, {"f": "himWave-1.png", "w": 24.997, "h": 62.329, "ax": 13.969}, {"f": "himWave-2.png", "w": 23.682, "h": 62.164, "ax": 12.114}, {"f": "himWave-3.png", "w": 24.175, "h": 62.000, "ax": 9.901}],
+    "himOpen": [{"f": "himOpen-0.png", "w": 31.082, "h": 63.151, "ax": 20.641}, {"f": "himOpen-1.png", "w": 47.199, "h": 62.987, "ax": 25.703}, {"f": "himOpen-2.png", "w": 52.297, "h": 62.987, "ax": 26.461}],
+    "hugJump": [{"f": "hugJump-0.png", "w": 33.056, "h": 59.369, "ax": 16.528}, {"f": "hugJump-1.png", "w": 29.109, "h": 61.178, "ax": 14.554}],
+    "hugSway": [{"f": "hugSway-0.png", "w": 31.740, "h": 62.000, "ax": 15.870}, {"f": "hugSway-1.png", "w": 31.740, "h": 62.164, "ax": 15.870}, {"f": "hugSway-2.png", "w": 30.589, "h": 61.671, "ax": 15.294}],
+    "hugCheek": [{"f": "hugCheek-0.png", "w": 33.177, "h": 61.700, "ax": 16.588}, {"f": "hugCheek-1.png", "w": 32.726, "h": 62.000, "ax": 16.363}],
+    "frontIdle": [{"f": "frontIdle-0.png", "w": 21.863, "h": 61.837, "ax": 10.659}, {"f": "frontIdle-1.png", "w": 21.537, "h": 62.000, "ax": 10.010}],
+    "frontTalk": [{"f": "frontTalk-0.png", "w": 33.611, "h": 61.511, "ax": 10.621}, {"f": "frontTalk-1.png", "w": 34.753, "h": 61.511, "ax": 11.305}, {"f": "frontTalk-2.png", "w": 25.779, "h": 61.674, "ax": 13.527}, {"f": "frontTalk-3.png", "w": 43.889, "h": 61.837, "ax": 21.268}],
+    "frontShy": [{"f": "frontShy-0.png", "w": 26.268, "h": 61.674, "ax": 11.428}, {"f": "frontShy-1.png", "w": 26.268, "h": 61.184, "ax": 11.384}],
+    "frontHeart": [{"f": "frontHeart-0.png", "w": 23.821, "h": 61.837, "ax": 11.376}, {"f": "frontHeart-1.png", "w": 23.984, "h": 61.674, "ax": 11.525}],
+    "portraits": [{"f": "portraits-0.png", "w": 47.853, "h": 65.769, "ax": 23.926}, {"f": "portraits-1.png", "w": 47.737, "h": 65.884, "ax": 23.869}, {"f": "portraits-2.png", "w": 47.853, "h": 65.884, "ax": 23.926}, {"f": "portraits-3.png", "w": 47.853, "h": 66.000, "ax": 23.926}, {"f": "portraits-4.png", "w": 47.853, "h": 66.000, "ax": 23.926}, {"f": "portraits-5.png", "w": 48.546, "h": 66.000, "ax": 24.273}],
+    "himIcon": [{"f": "himIcon-0.png", "w": 16.466, "h": 14.000, "ax": 8.233}],
+    "pineSmall": [{"f": "pineSmall-0.png", "w": 20.138, "h": 29.747, "ax": 10.069}],
+    "pineTall": [{"f": "pineTall-0.png", "w": 31.076, "h": 46.000, "ax": 15.538}],
+    "pineDouble": [{"f": "pineDouble-0.png", "w": 44.160, "h": 40.889, "ax": 22.080}],
+    "bird": [{"f": "bird-0.png", "w": 24.000, "h": 18.630, "ax": 12.000}, {"f": "bird-1.png", "w": 24.000, "h": 11.178, "ax": 12.000}, {"f": "bird-2.png", "w": 24.658, "h": 18.301, "ax": 12.329}, {"f": "bird-3.png", "w": 23.562, "h": 17.973, "ax": 11.781}],
+    "heart": [{"f": "heart-0.png", "w": 13.000, "h": 11.046, "ax": 6.500}],
+    "lifeHeart": [{"f": "lifeHeart-0.png", "w": 17.000, "h": 14.445, "ax": 8.500}]
+  },
+  "sky": ["ceu-0.jpg", "ceu-1.jpg", "ceu-2.jpg"],
+  "skyScale": 0.80833,
+  "ground": {"f": "chao.png", "scale": 0.22222, "surface": 27.6},
+  "falas": [
+    {"rosto": "SORRINDO", "texto": "Oi, meu amor! Como você está, animada?"},
+    {"rosto": "RINDO", "texto": "Como você sabe, precisei fazer um jogo na faculdade e então eu pensei: poxa, essa é uma grande oportunidade, vou me esforçar já que meu amorzinho sente falta da minha criatividade."},
+    {"rosto": "SORRINDO", "texto": "E bom, um tempinho atrás te entreguei um desenho e agora fiz esse jogo especialmente para você!"},
+    {"rosto": "TIMIDO", "texto": "Eu não tinha ideia do que eu te daria de presente de namoro, então pensei nesse joguinho simples como forma de te presentear e claro para comemorar nossos 2 ANOS DE NAMORO!"},
+    {"rosto": "RINDO", "texto": "Eu e nosso amigo Claudinho nos empenhamos bastante para terminar ele. Fui dando as ideias, ele me ajudando a fazer e eu ajustando o que precisava."},
+    {"rosto": "APAIXONADO", "texto": "Eu te amo mais, sabia?"},
+    {"rosto": "PISCANDO", "texto": "Mas bom, a sua missão é simples: correr até mim!"},
+    {"rosto": "SORRINDO", "texto": "Pule os pinheiros, deslize por baixo dos pássaros e pegue os corações pelo caminho."},
+    {"rosto": "PISCANDO", "texto": "Ah, e você só tem 3 vidas... Então toma cuidado, tá?"},
+    {"rosto": "APAIXONADO", "texto": "Te espero no final."}
+  ]
+}

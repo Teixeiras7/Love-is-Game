@@ -54,7 +54,10 @@ public class GameView extends JPanel {
     private final Sprite pineSmall, pineTall, pineDouble, heart, lifeHeart, herIcon, himIcon;
     private final List<BufferedImage> sky;
     private final BufferedImage[] ground = new BufferedImage[3];
-    private final double groundScale, groundSurface;
+    private final double skyScale, groundScale, groundSurface;
+
+    // Zoom no abraço: começa nesse tick do final e leva 2 segundos.
+    private static final int END_ZOOM_START = 150, END_ZOOM_TICKS = 120;
 
     public GameView(GameModel model) {
         this.model = model;
@@ -63,57 +66,41 @@ public class GameView extends JPanel {
         setPreferredSize(new Dimension(W * scale, H * scale));
         setFocusable(true);
 
-        // ---- ela: correndo / pulando / carrinho na mesma escala ----
-        List<List<Arte.Frame>> ela = Arte.slice(Arte.load("ela.png"), 20);
-        double k = Player.RUN_H / medianHeight(ela.get(0));
-        herRun = sprites(ela.get(0), k, false, true);
-        herJump = sprites(ela.get(1), k, false, true);
-        herSlide = sprites(ela.get(2), k, false, false);
-        BufferedImage stand = ela.get(3).get(0).img();
-        BufferedImage herHead = stand.getSubimage(0, 0, stand.getWidth(), stand.getHeight() * 28 / 100);
-        herIcon = sprite(new Arte.Frame(herHead, 0), 14.0 / herHead.getHeight(), false, false);
+        Atlas atlas = new Atlas();
+        herRun = sprites(atlas, "herRun");
+        herJump = sprites(atlas, "herJump");
+        herSlide = sprites(atlas, "herSlide");
+        herIcon = sprites(atlas, "herIcon")[0];
+        himWave = sprites(atlas, "himWave");
+        himOpen = sprites(atlas, "himOpen");
+        hugJump = sprites(atlas, "hugJump");
+        hugSway = sprites(atlas, "hugSway");
+        hugCheek = sprites(atlas, "hugCheek");
+        frontIdle = sprites(atlas, "frontIdle");
+        frontTalk = sprites(atlas, "frontTalk");
+        frontShy = sprites(atlas, "frontShy");
+        frontHeart = sprites(atlas, "frontHeart");
+        portraits = sprites(atlas, "portraits");
+        himIcon = sprites(atlas, "himIcon")[0];
+        pineSmall = sprites(atlas, "pineSmall")[0];
+        pineTall = sprites(atlas, "pineTall")[0];
+        pineDouble = sprites(atlas, "pineDouble")[0];
+        bird = sprites(atlas, "bird");
+        heart = sprites(atlas, "heart")[0];
+        lifeHeart = sprites(atlas, "lifeHeart")[0];
+        sky = atlas.sky;
+        skyScale = atlas.skyScale;
+        groundScale = atlas.groundScale;
+        groundSurface = atlas.groundSurface;
+        for (int i = 0; i < 3; i++) ground[i] = tint(atlas.ground, GROUND_TINT[i]);
+    }
 
-        // ---- ele (virado pra esquerda, esperando ela) ----
-        List<List<Arte.Frame>> ele = Arte.slice(Arte.load("ele.png"), 20);
-        double kh = 62.0 / medianHeight(ele.get(0));
-        himWave = sprites(ele.get(1), kh, true, true);
-        himOpen = sprites(ele.get(2), kh, true, true);
-
-        // ---- abraço do final ----
-        List<List<Arte.Frame>> abraco = Arte.slice(Arte.load("abraco.png"), 6);
-        hugJump = sprites(abraco.get(0).subList(3, 5), 62.0 / medianHeight(abraco.get(1)), false, false);
-        hugSway = sprites(abraco.get(1), 62.0 / medianHeight(abraco.get(1)), false, false);
-        hugCheek = sprites(abraco.get(2), 62.0 / medianHeight(abraco.get(2)), false, false);
-
-        // ---- cutscene: ele de frente + retratos ----
-        List<List<Arte.Frame>> frente = Arte.slice(Arte.load("ele-frente.png"), 20);
-        double kf = 62.0 / medianHeight(frente.get(0));
-        frontIdle = sprites(frente.get(0), kf, false, true);
-        frontTalk = sprites(frente.get(1), kf, false, true);
-        frontShy = sprites(frente.get(2).subList(0, 2), kf, false, true);
-        frontHeart = sprites(frente.get(2).subList(2, 4), kf, false, true);
-        List<Arte.Frame> faces = Arte.grid(Arte.load("ele-retrato.png"), 3, 2);
-        portraits = sprites(faces, 66.0 / medianHeight(faces), false, false);
-        BufferedImage face = faces.get(0).img();
-        BufferedImage himHead = face.getSubimage(0, 0, face.getWidth(), face.getHeight() * 62 / 100);
-        himIcon = sprite(new Arte.Frame(himHead, 0), 14.0 / himHead.getHeight(), false, false);
-
-        // ---- obstáculos ----
-        List<List<Arte.Frame>> obs = Arte.slice(Arte.load("obstaculos.png"), 20);
-        double kp = 46.0 / obs.get(0).get(1).img().getHeight();
-        pineSmall = sprite(obs.get(0).get(0), kp, false, false);
-        pineTall = sprite(obs.get(0).get(1), kp, false, false);
-        pineDouble = sprite(obs.get(0).get(2), kp, false, false);
-        bird = sprites(obs.get(1), 24.0 / obs.get(1).get(0).img().getWidth(), false, false);
-        heart = sprite(obs.get(2).get(0), 13.0 / obs.get(2).get(0).img().getWidth(), false, false);
-        lifeHeart = sprite(obs.get(2).get(0), 17.0 / obs.get(2).get(0).img().getWidth(), false, false);
-
-        // ---- cenário ----
-        sky = Arte.bands(Arte.load("paisagem.png"));
-        BufferedImage chao = Arte.trim(Arte.keyMagenta(Arte.load("chao.png")));
-        groundSurface = surfaceRow(chao);
-        groundScale = (H - GROUND + 2) / (chao.getHeight() - groundSurface);
-        for (int i = 0; i < 3; i++) ground[i] = tint(chao, GROUND_TINT[i]);
+    // Reduz cada quadro pro tamanho exato em pixels de tela (fica nítido).
+    private Sprite[] sprites(Atlas atlas, String name) {
+        return atlas.get(name).stream()
+            .map(f -> new Sprite(Arte.resize(f.img(), (int) Math.round(f.w() * scale), (int) Math.round(f.h() * scale)),
+                f.w(), f.h(), f.ax()))
+            .toArray(Sprite[]::new);
     }
 
     public Image icon() { return herIcon.img(); }
@@ -135,11 +122,14 @@ public class GameView extends JPanel {
         g.fillRect(-4, -4, W + 8, H + 8);
         if (model.getShake() > 0) g.translate(tick % 3 - 1, (tick / 2) % 3 - 1);
 
+        GameState state = model.getState();
+        AffineTransform screen = g.getTransform();
+        if (state == GameState.STORY_END) applyEndZoom(g);
+
         double phase = model.getSkyPhase();
         drawSky(g, phase);
         drawGround(g, phase);
 
-        GameState state = model.getState();
         if (state == GameState.INTRO) {
             drawIntro(g);
             return;
@@ -151,6 +141,7 @@ public class GameView extends JPanel {
             drawBoyfriend(g);
             drawPlayer(g);
         }
+        g.setTransform(screen); // textos e HUD ficam fora do zoom
 
         switch (state) {
             case MENU -> drawMenu(g);
@@ -176,9 +167,8 @@ public class GameView extends JPanel {
         int i = Math.min(1, (int) phase);
         double f = phase - i;
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        double k = (GROUND + 10.0) / sky.get(0).getHeight(); // mesma escala nas 3 faixas = alinhadas na mistura
-        drawStrip(g, sky.get(i), -2, k, 0.25, 1f);
-        if (f > 0) drawStrip(g, sky.get(i + 1), -2, k, 0.25, (float) f);
+        drawStrip(g, sky.get(i), -2, skyScale, 0.25, 1f);
+        if (f > 0) drawStrip(g, sky.get(i + 1), -2, skyScale, 0.25, (float) f);
     }
 
     private void drawGround(Graphics2D g, double phase) {
@@ -196,10 +186,9 @@ public class GameView extends JPanel {
         double x0 = -((model.getDistance() * parallax) % (2 * w));
         Composite old = g.getComposite();
         if (alpha < 1) g.setComposite(AlphaComposite.SrcOver.derive(alpha));
-        for (int t = 0; x0 + t * w < W; t++) {
+        for (int t = -1; x0 + t * w < W; t++) { // começa em -1: cobre a esquerda no zoom do final
             double x = x0 + t * w;
-            if (x + w < 0) continue;
-            boolean flip = t % 2 == 1;
+            boolean flip = Math.floorMod(t, 2) == 1;
             AffineTransform at = new AffineTransform();
             at.translate(flip ? x + w + 0.3 : x - 0.3, top); // 0.3 = sobreposição pra não aparecer fresta
             at.scale((flip ? -1 : 1) * (k + 0.6 / img.getWidth()), k);
@@ -282,8 +271,15 @@ public class GameView extends JPanel {
         int e = model.getEndTick();
         Sprite s = e < 16 ? hugJump[e / 8] : e < 160 ? hugSway[((e - 16) / 10) % hugSway.length]
             : hugCheek[((e - 160) / 24) % hugCheek.length];
-        double cx = (model.getPlayer().centerX() + model.getBoyfriendX() + Player.RUN_W / 2.0) / 2;
+        double cx = coupleX();
         draw(g, s, cx, GROUND + 1);
+        for (int k = 0; k < 6; k++) { // coraçõezinhos subindo
+            int t = e - 20 - k * 18;
+            if (t < 0) continue;
+            t %= 108;
+            double x = cx + Math.sin((t + k * 30) * 0.08) * 10;
+            drawFaded(g, heart, x, GROUND - 66 - t / 2.0, 1f - t / 108f);
+        }
     }
 
     // ---------------- cutscene ----------------
@@ -439,21 +435,37 @@ public class GameView extends JPanel {
         if ((tick / 20) % 2 == 0) textCentered(g, "ENTER recomeçar    ESC menu", 138, SMALL, Color.WHITE);
     }
 
+    // Textos do final (fora do zoom) e o escurecer antes de voltar pro menu.
     private void drawStoryEnd(Graphics2D g) {
         int end = model.getEndTick();
-        double cx = (model.getPlayer().centerX() + model.getBoyfriendX() + Player.RUN_W / 2.0) / 2;
-        for (int k = 0; k < 6; k++) { // coraçõezinhos subindo
-            int t = end - 20 - k * 18;
-            if (t < 0) continue;
-            t %= 108;
-            double x = cx + Math.sin((t + k * 30) * 0.08) * 10;
-            drawFaded(g, heart, x, GROUND - 66 - t / 2.0, 1f - t / 108f);
+        if (end > END_ZOOM_START + END_ZOOM_TICKS / 2) {
+            textCentered(g, "VOCÊ CHEGOU ATÉ MIM!", 28, TITLE.deriveFont(22f), PINK);
+            textCentered(g, "Corações coletados: " + model.getHearts(), 44, BIG, Color.WHITE);
         }
-        if (end > 40) {
-            textCentered(g, "VOCÊ CHEGOU ATÉ MIM!", 56, TITLE.deriveFont(22f), PINK);
-            textCentered(g, "Corações coletados: " + model.getHearts(), 74, BIG, Color.WHITE);
+        if (end > 100 && (tick / 30) % 2 == 0) textCentered(g, "ENTER para voltar ao menu", 208, SMALL, Color.WHITE);
+        double fade = clamp((end - (GameModel.END_TICKS - 60)) / 60.0);
+        if (fade > 0) {
+            g.setColor(new Color(0, 0, 0, (int) (fade * 255)));
+            g.fillRect(-4, -4, W + 8, H + 8);
         }
-        if (end > 100 && (tick / 30) % 2 == 0) textCentered(g, "ENTER para voltar ao menu", 205, SMALL, Color.WHITE);
+    }
+
+    private double coupleX() {
+        return (model.getPlayer().centerX() + model.getBoyfriendX() + Player.RUN_W / 2.0) / 2;
+    }
+
+    // Câmera aproxima do casal e leva ele pro meio da tela.
+    private void applyEndZoom(Graphics2D g) {
+        double p = clamp((model.getEndTick() - END_ZOOM_START) / (double) END_ZOOM_TICKS);
+        p = p * p * (3 - 2 * p); // suave no começo e no fim
+        double cx = coupleX(), cy = GROUND - 31, z = 1 + 1.4 * p;
+        g.translate(cx + (W / 2.0 - cx) * p, cy + (H * 0.62 - cy) * p);
+        g.scale(z, z);
+        g.translate(-cx, -cy);
+    }
+
+    private static double clamp(double v) {
+        return Math.max(0, Math.min(1, v));
     }
 
     // ---------------- utilitários ----------------
@@ -471,36 +483,6 @@ public class GameView extends JPanel {
         g.setComposite(AlphaComposite.SrcOver.derive(Math.max(0f, Math.min(1f, alpha))));
         draw(g, s, cx, bottom);
         g.setComposite(old);
-    }
-
-    private Sprite[] sprites(List<Arte.Frame> frames, double k, boolean flip, boolean bodyAnchor) {
-        Sprite[] out = new Sprite[frames.size()];
-        for (int i = 0; i < out.length; i++) out[i] = sprite(frames.get(i), k, flip, bodyAnchor);
-        return out;
-    }
-
-    // k = unidades do jogo por pixel da imagem original.
-    private Sprite sprite(Arte.Frame f, double k, boolean flip, boolean bodyAnchor) {
-        BufferedImage src = flip ? Arte.flip(f.img()) : f.img();
-        double w = src.getWidth() * k, h = src.getHeight() * k;
-        double ax = bodyAnchor ? f.anchorX() * k : w / 2;
-        if (flip && bodyAnchor) ax = w - ax;
-        return new Sprite(Arte.resize(src, (int) Math.round(w * scale), (int) Math.round(h * scale)), w, h, ax);
-    }
-
-    private static double medianHeight(List<Arte.Frame> frames) {
-        int[] hs = frames.stream().mapToInt(f -> f.img().getHeight()).sorted().toArray();
-        return hs[hs.length / 2];
-    }
-
-    // Primeira linha em que a grama já é contínua = onde os pés pisam.
-    private static double surfaceRow(BufferedImage im) {
-        for (int y = 0; y < im.getHeight(); y++) {
-            int solid = 0;
-            for (int x = 0; x < im.getWidth(); x++) if ((im.getRGB(x, y) >>> 24) != 0) solid++;
-            if (solid > im.getWidth() * 0.95) return y;
-        }
-        return 0;
     }
 
     private static BufferedImage tint(BufferedImage src, Color c) {

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+  <title>Love is Game</title>
+  <link rel="icon" href="arte/herIcon-0.png">
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; height: 100%; background: #000; overflow: hidden;
+      touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+      font-family: system-ui, sans-serif;
+    }
+    canvas { position: fixed; display: block; }
+
+    /* Botões de toque: só aparecem em celular/tablet, durante a corrida */
+    .touch {
+      position: fixed; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 2;
+      width: min(22vmin, 120px); height: min(22vmin, 120px); border-radius: 50%;
+      border: 3px solid rgba(255, 110, 170, .9); background: rgba(25, 15, 45, .55);
+      color: #fff; font: 700 clamp(11px, 3.2vmin, 16px) system-ui, sans-serif;
+      display: none; align-items: center; justify-content: center; flex-direction: column; gap: 2px;
+    }
+    .touch.on { display: flex; }
+    .touch:active, .touch.down { background: rgba(255, 110, 170, .55); }
+    .touch b { font-size: 1.8em; line-height: 1; }
+    #btnPular { left: max(16px, env(safe-area-inset-left)); }
+    #btnDeslizar { right: max(16px, env(safe-area-inset-right)); }
+    #btnPausa {
+      top: max(10px, env(safe-area-inset-top)); bottom: auto; right: max(10px, env(safe-area-inset-right));
+      width: 44px; height: 44px; font-size: 18px;
+    }
+
+    #carregando, #girar {
+      position: fixed; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 14px; background: #120a24; color: #ff6eaa; font-weight: 700; text-align: center;
+      padding: 24px;
+    }
+    #barra { width: min(60vw, 320px); height: 10px; border-radius: 5px; background: #2a1a48; overflow: hidden; }
+    #barra div { height: 100%; width: 0; background: #ff6eaa; transition: width .2s; }
+    #girar { display: none; font-size: 20px; }
+    #girar span { font-size: 56px; }
+    @media (orientation: portrait) and (pointer: coarse) { #girar { display: flex; } }
+  </style>
+</head>
+<body>
+  <canvas id="tela"></canvas>
+
+  <button class="touch" id="btnPular" aria-label="Pular"><b>▲</b>PULAR</button>
+  <button class="touch" id="btnDeslizar" aria-label="Deslizar"><b>▼</b>DESLIZAR</button>
+  <button class="touch" id="btnPausa" aria-label="Pausar">II</button>
+
+  <div id="carregando">
+    <div>LOVE IS GAME</div>
+    <div id="barra"><div></div></div>
+  </div>
+  <div id="girar"><span>📱↻</span>Gire o celular para jogar deitado</div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -14,6 +14,7 @@ public class GameModel {
     public static final int STORY_LENGTH = 20000; // ~75s de corrida até ele
 
     public static final int START_LIVES = 3;
+    public static final int END_TICKS = 600; // ~10s de final (abraço + zoom) antes de voltar ao menu
     private static final int INVINCIBLE_TICKS = 90, HEART_POINTS = 50, BIRDS_FROM = 1500;
     private static final int TICKS_PER_CHAR = 2;
     // Pássaro baixo: passa por cima dela deslizando, mas acerta ela em pé. Alto: só acerta se pular.
@@ -60,6 +61,7 @@ public class GameModel {
 
     // ENTER: termina de mostrar a fala; se já terminou, vai pra próxima.
     public void advanceIntro() {
+        if (state != GameState.INTRO) return;
         if (isTyping()) {
             introTick = getFala().texto().length() * TICKS_PER_CHAR;
         } else if (++introLine < Falas.INTRO.size()) {
@@ -102,6 +104,7 @@ public class GameModel {
             case STORY_END -> {
                 endTick++;
                 player.update(false, false);
+                if (endTick >= END_TICKS) backToMenu(); // fim da animação do abraço
             }
             default -> { }
         }
