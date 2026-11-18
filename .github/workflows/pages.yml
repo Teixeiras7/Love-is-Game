@@ -24,6 +24,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Regenera Jogo/web/arte (imagens + falas) a partir de Jogo/arte e Falas.java,
+      # assim o site nunca fica com falas antigas, mesmo sem rodar o exportar-web.bat.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Gerar arte e falas da versão web
+        working-directory: Jogo
+        run: |
+          mkdir -p bin
+          javac -encoding UTF-8 -d bin -sourcepath src ferramentas/ExportarWeb.java
+          java -Djava.awt.headless=true -cp bin view.ExportarWeb
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
